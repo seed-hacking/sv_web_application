@@ -204,7 +204,7 @@ sub add_entry {
   # get all other parameters
   my $parameters = {};
   foreach my $p ($self->_cgi->param()) {
-    my @v = $self->_cgi->param($p); 
+    my @v = $self->_cgi->multi_param($p); 
     $parameters->{$p} = \@v;
   }
 
