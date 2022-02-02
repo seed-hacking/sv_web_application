@@ -91,7 +91,7 @@ sub render {
   unless (ref($application)) {
     return "Could not initialize application";
   }
-  $application->url($cgi->param("url"));
+  $application->url(scalar $cgi->param("url"));
   my $page_object = $page->new($application);
   $application->page($page_object);
   $page_object->init();
