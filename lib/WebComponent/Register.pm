@@ -300,7 +300,7 @@ sub perform_registration {
   my $user;
   
   # check login
-  my $user_by_login = $application->dbmaster->User->init( { login => $cgi->param('login') } );
+  my $user_by_login = $application->dbmaster->User->init( { login => scalar $cgi->param('login') } );
   if (ref($user_by_login)) {
     
     unless ($user_by_login->email eq $cgi->param('email')) {
@@ -313,7 +313,7 @@ sub perform_registration {
   else {
 
     # check email 
-    my $user_by_email = $application->dbmaster->User->init( { email => $cgi->param('email') } );
+    my $user_by_email = $application->dbmaster->User->init( { email => scalar $cgi->param('email') } );
     if (ref($user_by_email)) {
       
       unless ($user_by_email->login eq $cgi->param('login')) {
@@ -339,7 +339,7 @@ sub perform_registration {
   my $group;
   if (defined($cgi->param('group')) && $cgi->param('group')) {
     $group_name = $cgi->param('group');
-    my $possible_groups = $application->dbmaster->Scope->get_objects( { name => $cgi->param('group') } );
+    my $possible_groups = $application->dbmaster->Scope->get_objects( { name => scalar $cgi->param('group') } );
       if (scalar(@$possible_groups) == 1) {
 	unless ($possible_groups->[0]->application) {
 	  $group = $possible_groups->[0];
@@ -358,7 +358,7 @@ sub perform_registration {
       
     # check if scope exists
     if ($application->dbmaster->Scope->init( { application => undef,
-					       name => $cgi->param('login') } )) {
+					       name => scalar $cgi->param('login') } )) {
       $application->add_message('warning', 'This login is already taken.');
       return 0;
     }
@@ -376,10 +376,10 @@ sub perform_registration {
     }
       
     # create the user in the db
-    $user = $application->dbmaster->User->create( { email        => $cgi->param('email'),
-						    firstname    => $cgi->param('firstname'),
-						    lastname     => $cgi->param('lastname'),
-						    login        => $cgi->param('login') } );
+    $user = $application->dbmaster->User->create( { email        => scalar $cgi->param('email'),
+						    firstname    => scalar $cgi->param('firstname'),
+						    lastname     => scalar $cgi->param('lastname'),
+						    login        => scalar $cgi->param('login') } );
       
     # check for success
     unless (ref($user)) {
@@ -430,7 +430,7 @@ sub perform_registration {
   $abody->param('APPLICATION_URL', $WebConfig::APPLICATION_URL);
   $abody->param('EMAIL_ADMIN', $WebConfig::ADMIN_EMAIL);
   $abody->param('URL', $url);
-  $abody->param('COUNTRY', $cgi->param('country'));
+  $abody->param('COUNTRY', scalar $cgi->param('country'));
   if ($user_org) {
     $abody->param('ORGANIZATION', $user_org);
     if ($org_found) {
@@ -571,22 +571,22 @@ sub claim_invitation {
   }
 
   # check if a valid invitation
-  my $user = $self->application->dbmaster->User->init({ login => $cgi->param('invite') });
+  my $user = $self->application->dbmaster->User->init({ login => scalar $cgi->param('invite') });
   unless(ref $user and $user->email eq $cgi->param('email')) {
     $self->application->add_message('warning', 'This is not a valid invitation request');
     return 0;
   }
 
   # check if login is taken
-  if (ref($self->application->dbmaster->User->init( { login => $cgi->param('login') } ))) {
+  if (ref($self->application->dbmaster->User->init( { scalar login => $cgi->param('login') } ))) {
     $self->application->add_message('warning', 'This login is already taken.');
     return 0;
   }
 
   # update the user information
-  $user->login( $cgi->param('login') );
-  $user->firstname( $cgi->param('firstname') );
-  $user->lastname( $cgi->param('lastname') );
+  $user->login( scalar $cgi->param('login') );
+  $user->firstname( scalar $cgi->param('firstname') );
+  $user->lastname( scalar $cgi->param('lastname') );
   
     
   # check for organization information
@@ -647,7 +647,7 @@ sub claim_invitation {
   $abody->param('APPLICATION_URL', $WebConfig::APPLICATION_URL);
   $abody->param('EMAIL_ADMIN', $WebConfig::ADMIN_EMAIL);
   $abody->param('URL', $url);
-  $abody->param('COUNTRY', $cgi->param('country'));
+  $abody->param('COUNTRY', scalar $cgi->param('country'));
   if ($user_org) {
     $abody->param('ORGANIZATION', $user_org);
     if (ref $user_org) {

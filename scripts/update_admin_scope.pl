@@ -2,10 +2,9 @@
 use strict;
 use warnings;
 
-use lib('../../WebApplication');
-use lib('../../PPO');
-
 use WebApplicationDBHandle;
+
+use SeedViewer::MyAppRights;
 
 use Getopt::Long;
 
@@ -51,7 +50,6 @@ unless (ref($scope)) {
 				       'description' => 'automatically created admin scope' } );
 }
 
-require MyAppRights;
 my $rights = eval("$application\::MyAppRights::rights()");
 foreach my $right (@$rights) {
 

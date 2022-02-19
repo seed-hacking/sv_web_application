@@ -104,7 +104,7 @@ sub output {
     my $region_size = $cgi->param('region_size') || $self->region_size();
     $self->region_size($region_size);
 
-    my @pegs = $cgi->param('feature');
+    my @pegs = $cgi->multi_param('feature');
 
     my $step_peg = {};
 
@@ -122,8 +122,8 @@ sub output {
 	$step_peg = $self->step_pegs($focus_peg, $region_size);
     }
 
-    my @input_column  = $cgi->param('ic0');
-    my @features      = $cgi->param('features');
+    my @input_column  = $cgi->multi_param('ic0');
+    my @features      = $cgi->multi_param('features');
     my @selected_pegs = ();
 
     if ( @features and @input_column ) {
@@ -184,7 +184,7 @@ sub output {
     $self->sims_from($sims_from);
 
     my $show_genomes = [];
-    my @cgi_show_genomes = $cgi->param('show_genome');
+    my @cgi_show_genomes = $cgi->multi_param('show_genome');
     if ( @cgi_show_genomes ) {
 	#  Undefined genomes are creeping in (probably from FIG.pm)
 	$show_genomes = grep { defined $_ } \@cgi_show_genomes;

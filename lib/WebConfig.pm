@@ -22,7 +22,7 @@ use constant TMPL_URL_PATH  => "./Html/";
 sub CFG_PATH () {
     if ($ENV{KB_TOP})
     {
-	"$ENV{KB_TOP}/lib/WebApplication";
+	"$ENV{KB_TOP}/lib/WebApplication/";
     }
     else
     {
@@ -69,6 +69,13 @@ our $LOGIN_DEPENDENCIES = { 'RAST'       => [ 'SeedViewer', 'MGRAST', 'PRAST' ],
 
 
 #
+# Load the WEbApplication config file so we can
+# have a deployment set the defaults
+#
+
+import_local_config("WebApplication");
+
+#
 # Method to import local configurations 
 # from config/WebApplication/BackendName.cfg
 #
@@ -91,3 +98,5 @@ sub import_local_config {
     }
   }
 }
+
+1;
