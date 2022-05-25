@@ -19,11 +19,13 @@ my $lastname   = '';
 my $login      = '';
 my $email      = '';
 my $comment    = '';
+my $password    = '';
 
 GetOptions ( 'firstname=s' => \$firstname,
 	     'lastname=s' => \$lastname,
 	     'login=s' => \$login,
 	     'email=s' => \$email,
+	     'password=s' => \$password,
 	     'comment=s' => \$comment,
 	   );
 
@@ -63,6 +65,7 @@ $user = $dbmaster->User->create( { email        => $email,
 				   firstname    => $firstname,
 				   lastname     => $lastname,
 				   login        => $login,
+				   (defined($password) ? (password => $password) : ()),
 				   active       => 1,
 				   
 				 } );
