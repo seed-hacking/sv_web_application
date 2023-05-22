@@ -30,7 +30,8 @@ TPAGE_ARGS = --define kb_top=$(TARGET) --define kb_runtime=$(DEPLOY_RUNTIME) --d
 
 all: bin  cp-html cp-templates
 
-bin: $(BIN_PERL) $(BIN_SERVICE_PERL) $(BIN_CGI_PERL)
+bin: $(BIN_PERL) $(BIN_SERVICE_PERL) $(BIN_CGI_PERL) $(CGI_BIN_DIR)/download.cgi
+
 
 cp-html: 
 	mkdir -p $(TOP_DIR)/html
@@ -129,6 +130,9 @@ test-prod-server:
 clean:
 	ant clean
 
+$(CGI_BIN_DIR)/%.cgi: cgi-scripts/%.pl $(TOP_DIR)/user-env.sh
+	$(WRAP_PERL_SCRIPT) '$$KB_TOP/modules/$(CURRENT_DIR)/$<' $@
+	
 $(BIN_DIR)/%: service-scripts/%.pl $(TOP_DIR)/user-env.sh
 	$(WRAP_PERL_SCRIPT) '$$KB_TOP/modules/$(CURRENT_DIR)/$<' $@
 
